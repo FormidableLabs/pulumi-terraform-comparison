@@ -1,0 +1,4 @@
+environment:
+  project_name: "pulumi-terraform"
+  unique_identifier: "terraform-formidable"
+  aws_region: "us-east-1"
