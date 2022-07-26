@@ -7,7 +7,7 @@ const projectName = config.require("project_name");
 const uniqueId = config.require("unique_identifier");
 const prefix = `${projectName}-${uniqueId}`
 
-const lambdaRole = new aws.iam.Role(`lambdaRole`, {
+const lambdaRole = new aws.iam.Role(`${prefix}-lambda`, {
   name: `${prefix}-lambda`,
   assumeRolePolicy: `{
     "Version": "2012-10-17",
