@@ -7,6 +7,30 @@ const projectName = config.require("project_name");
 const uniqueId = config.require("unique_identifier");
 const prefix = `${projectName}-${uniqueId}`
 
+const cloudWatch = new aws.cloudwatch.LogGroup(`${prefix}-logs`, {
+  retentionInDays: config.getNumber("logRetention") || 14
+});
+
+const lambdaLoggingPolicy = new aws.iam.Policy(`${prefix}-lambda-logging`, {
+  path: "/",
+  description: "Policy to allow the IAM role for Lambda to write to CloudWatch Logs",
+  policy: `{
+    "Version": "2012-10-17",
+    "Statement": [
+      {
+        "Action": [
+          "logs:CreateLogGroup",
+          "logs:CreateLogStream",
+          "logs:PutLogEvents"
+        ],
+        "Resource": "arn:aws:logs:*:*:*",
+        "Effect": "Allow",
+        "Sid": ""
+      }
+    ]
+  }`,
+});
+
 const lambdaRole = new aws.iam.Role(`${prefix}-lambda`, {
   name: `${prefix}-lambda`,
   assumeRolePolicy: `{
@@ -24,6 +48,11 @@ const lambdaRole = new aws.iam.Role(`${prefix}-lambda`, {
   }`
 });
 
+const lambdaRoleAttachment = new aws.iam.RolePolicyAttachment(`${prefix}-logs`, {
+  role: lambdaRole.name,
+  policyArn: lambdaLoggingPolicy.arn,
+});
+
 // Create zip file for Lambda
 const lambdaZip = new AdmZip();
 lambdaZip.addLocalFolder("../lambda");
@@ -34,4 +63,9 @@ const lambdaFunction = new aws.lambda.Function(`${prefix}-lambda`, {
   role: lambdaRole.arn,
   handler: "index.handler",
   runtime: "nodejs16.x",
+}, {
+  dependsOn: [
+    lambdaRoleAttachment,
+    cloudWatch,
+  ],
 });

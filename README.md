@@ -30,6 +30,9 @@ Designed to be a side-by-side comparison of [Pulumi](https://www.pulumi.com/) an
   * See pending changes
 * `terragrunt apply`
   * Apply pending changes
+* Importing:
+  * `pulumi import ${resourceType:?} ${definedName:?} ${resourceName:?}`
+  * Example: `pulumi import aws:iam/role:Role pulumi-pulumi-personal-lambda pulumi-terraform-personal-lambda`
 
 ## Pulumi
 
