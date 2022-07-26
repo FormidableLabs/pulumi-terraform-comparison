@@ -1,6 +1,7 @@
 import * as pulumi from "@pulumi/pulumi";
 import * as aws from "@pulumi/aws";
-import * as awsx from "@pulumi/awsx";
+import * as AdmZip from 'adm-zip';
+
 
 const config = new pulumi.Config();
 const projectName = config.require("project_name");
@@ -27,17 +28,17 @@ const lambdaRole = new aws.iam.Role(`lambdaRole`, {
   }`
 });
 
+// Create zip file for Lambda
+const lambdaZip = new AdmZip();
+lambdaZip.addLocalFolder("../lambda");
+lambdaZip.writeZip("lambda.zip");
+
 /*
-const testLambda = new aws.lambda.Function("testLambda", {
-    code: new pulumi.asset.FileArchive("lambda_function_payload.zip"),
-    role: lambdaRole.arn,
-    handler: "index.test",
-    runtime: "nodejs12.x",
-    environment: {
-        variables: {
-            foo: "bar",
-        },
-    },
+const lambdaFunction = new aws.lambda.Function(`${prefix}-lambda`, {
+  code: new pulumi.asset.FileArchive("lambda.zip"),
+  role: lambdaRole.arn,
+  handler: "index.handler",
+  runtime: "nodejs16.x",
 });
 */
 
