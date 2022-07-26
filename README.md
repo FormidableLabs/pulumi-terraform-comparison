@@ -14,6 +14,8 @@ Designed to be a side-by-side comparison of [Pulumi](https://www.pulumi.com/) an
   * Can do `console.log` in middle of code
 * Pulumi has a tendency to replace rather than update
   * Updating an IAM role name caused a replace rather than an update
+* Pulumi assumes that changes are not made directly to resources
+  * If you modify resources directly in AWS, have to run a `pulumi refresh` in order for the changes to be recognized
 
 ## Terraform
 
