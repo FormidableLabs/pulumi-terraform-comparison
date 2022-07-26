@@ -1,2 +1,4 @@
 config:
   aws:region: us-east-1
+  formidable-terraform-comparison:project_name: "pulumi"
+  formidable-terraform-comparison:unique_identifier: "pulumi-personal"

@@ -7,6 +7,13 @@ Designed to be a side-by-side comparison of [Pulumi](https://www.pulumi.com/) an
   * If you use an email address to set up your account, doesn't seem like you have the option to use MFA...
     * You are able to use your GitHub/GitLab/Atlassian/SAML SSO which can be secured with MFA however
   * Not sure where the token for Pulumi is stored when entered for a project
+* Pulumi has a central dashboard for viewing all of your stacks
+  * Does have a concept of an organization
+* Think that I personally like the docs better for Pulumi compared to Terraform
+* Variables/configurations
+  * Pulumi doesn't seem to have a way to set parameters in a configuration file
+* Easier debugging in Pulumi
+  * Can do `console.log` in middle of code
 
 ## Terraform
 
@@ -35,6 +42,8 @@ Designed to be a side-by-side comparison of [Pulumi](https://www.pulumi.com/) an
   * `pulumi new aws-typescript`
 
 ### Usage
+* Previewing changes to be made
+  * `pulumi preview`
 * Deploy the stack to AWS
   * `pulumi up`
     * Will show a preview of what is going to be applied before actually doing it
@@ -44,6 +53,16 @@ Designed to be a side-by-side comparison of [Pulumi](https://www.pulumi.com/) an
   * `pulumi stack select ${NAME:?}`
 * Destroying the stack
   * `pulumi destroy`
+
+#### Configurations
+Configurations are stored in the `Pulumi.dev.yaml` file (`dev` is the environment name)
+
+* List all the configurations (variables) that are set
+  * `pulumi config`
+* Set a variable
+  * `pulumi config set ${key:?} ${value:?}`
+* Get a variable
+  * `pulumi config get ${key:?}`
 
 ### Links
 * [Downloading/Installing - Official Docs](https://www.pulumi.com/docs/get-started/install/)
