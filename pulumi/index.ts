@@ -7,10 +7,6 @@ const projectName = config.require("project_name");
 const uniqueId = config.require("unique_identifier");
 const prefix = `${projectName}-${uniqueId}`
 
-const cloudWatch = new aws.cloudwatch.LogGroup(`${prefix}-logs`, {
-  retentionInDays: config.getNumber("logRetention") || 14
-});
-
 const lambdaLoggingPolicy = new aws.iam.Policy(`${prefix}-lambda-logging`, {
   path: "/",
   description: "Policy to allow the IAM role for Lambda to write to CloudWatch Logs",
@@ -66,6 +62,5 @@ const lambdaFunction = new aws.lambda.Function(`${prefix}-lambda`, {
 }, {
   dependsOn: [
     lambdaRoleAttachment,
-    cloudWatch,
   ],
 });
