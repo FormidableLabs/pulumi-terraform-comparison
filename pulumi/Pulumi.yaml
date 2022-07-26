@@ -1,0 +1,3 @@
+name: formidable-terraform-comparison
+runtime: nodejs
+description: Comparing Pulumi to Terraform
