@@ -10,10 +10,10 @@ Designed to be a side-by-side comparison of [Pulumi](https://www.pulumi.com/) an
 * Pulumi has a central dashboard for viewing all of your stacks
   * Does have a concept of an organization
 * Think that I personally like the docs better for Pulumi compared to Terraform
-* Variables/configurations
-  * Pulumi doesn't seem to have a way to set parameters in a configuration file
 * Easier debugging in Pulumi
   * Can do `console.log` in middle of code
+* Pulumi has a tendency to replace rather than update
+  * Updating an IAM role name caused a replace rather than an update
 
 ## Terraform
 

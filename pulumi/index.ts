@@ -7,14 +7,11 @@ const projectName = config.require("project_name");
 const uniqueId = config.require("unique_identifier");
 const prefix = `${projectName}-${uniqueId}`
 
-console.log(prefix);
-
-
 // Create an AWS resource (S3 Bucket)
 const bucket = new aws.s3.Bucket("pulumi-created-bucket");
 
 const lambdaRole = new aws.iam.Role(`lambdaRole`, {
-  name: `${prefix}-lambda-test`,
+  name: `${prefix}-lambda`,
   assumeRolePolicy: `{
     "Version": "2012-10-17",
     "Statement": [
