@@ -10,26 +10,40 @@ Designed to be a side-by-side comparison of [Pulumi](https://www.pulumi.com/) an
 
 ## Terraform
 
-### Initializing
+### Initializing/Setup
 * From the `terraform` directory:
   * Setup Terragrunt Configuration:
     * Copy the file `terragrunt-config-example.yaml` to `terragrunt-config.yaml`
     * Modify the file according to needs
   * Use terragrunt to setup the state bucket/table:
     * `terragrunt init`
-  * Terragrunt usage:
-    * `terragrunt plan`
-    * `terragrunt apply`
+
+### Usage
+* `terragrunt plan`
+  * See pending changes
+* `terragrunt apply`
+  * Apply pending changes
 
 ## Pulumi
 
-### Initializing
+### Initializing/Setup
 * Download and Install Pulumi
   * [Looks like Pulumi recommends downloading directly from them](https://www.pulumi.com/docs/get-started/install/)
   * `brew install pulumi` did work on my Linux machine however
 * [Create a Pulumi account](https://app.pulumi.com/signup) (if you don't already have one)
 * Creating a new project:
   * `pulumi new aws-typescript`
+
+### Usage
+* Deploy the stack to AWS
+  * `pulumi up`
+    * Will show a preview of what is going to be applied before actually doing it
+* Viewing stacks
+  * `pulumi stack ls`
+* Switching to a different active stack:
+  * `pulumi stack select ${NAME:?}`
+* Destroying the stack
+  * `pulumi destroy`
 
 ### Links
 * [Downloading/Installing - Official Docs](https://www.pulumi.com/docs/get-started/install/)
