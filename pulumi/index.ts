@@ -6,6 +6,7 @@ const config = new pulumi.Config();
 const projectName = config.require("project_name");
 const uniqueId = config.require("unique_identifier");
 const prefix = `${projectName}-${uniqueId}`
+const lambdaName = `${prefix}-lambda`
 
 const lambdaLoggingPolicy = new aws.iam.Policy(`${prefix}-lambda-logging`, {
   path: "/",
@@ -49,18 +50,25 @@ const lambdaRoleAttachment = new aws.iam.RolePolicyAttachment(`${prefix}-logs`, 
   policyArn: lambdaLoggingPolicy.arn,
 });
 
+const cloudWatch = new aws.cloudwatch.LogGroup(`/aws/lambda/${lambdaName}`, {
+  name: `/aws/lambda/${lambdaName}`,
+  retentionInDays: config.getNumber("logRetention") || 14
+});
+
 // Create zip file for Lambda
 const lambdaZip = new AdmZip();
 lambdaZip.addLocalFolder("../lambda");
 lambdaZip.writeZip("lambda.zip");
 
-const lambdaFunction = new aws.lambda.Function(`${prefix}-lambda`, {
+const lambdaFunction = new aws.lambda.Function(`${lambdaName}`, {
   code: new pulumi.asset.FileArchive("lambda.zip"),
+  name: lambdaName,
   role: lambdaRole.arn,
   handler: "index.handler",
   runtime: "nodejs16.x",
 }, {
   dependsOn: [
     lambdaRoleAttachment,
+    cloudWatch,
   ],
 });

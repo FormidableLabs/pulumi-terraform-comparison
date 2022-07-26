@@ -50,6 +50,9 @@ Designed to be a side-by-side comparison of [Pulumi](https://www.pulumi.com/) an
 * Deploy the stack to AWS
   * `pulumi up`
     * Will show a preview of what is going to be applied before actually doing it
+* If you modify resources directly in AWS (without Pulumi), Pulumi freaks out, and you may have to refresh Pulumi
+  * `pulumi refresh`
+  * This will almost certainly happen if you delete a resource that was managed by Pulumi
 * Viewing stacks
   * `pulumi stack ls`
 * Switching to a different active stack:
