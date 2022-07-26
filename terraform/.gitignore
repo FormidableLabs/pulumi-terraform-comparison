@@ -1,5 +1,6 @@
 terraform.tfvars
 terragrunt-config.yaml
+lambda.zip
 .terraform
 .terragrunt-cache
 .terraform.lock.hcl

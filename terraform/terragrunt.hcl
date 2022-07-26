@@ -6,6 +6,11 @@ inputs = {
   project_name = local.config.environment.project_name
   unique_identifier = local.config.environment.unique_identifier
   region = local.config.environment.aws_region
+  working_dir = get_terragrunt_dir()
+}
+
+dependencies {
+  paths = ["../lambda"]
 }
 
 terraform {
