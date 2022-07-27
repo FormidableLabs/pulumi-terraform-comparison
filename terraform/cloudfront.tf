@@ -5,10 +5,10 @@ resource "aws_cloudfront_distribution" "api_gateway" {
     origin_id   = "api"
 
     custom_origin_config {
-			http_port              = 80
-			https_port             = 443
-			origin_protocol_policy = "https-only"
-			origin_ssl_protocols   = ["TLSv1","TLSv1.1"]
+      http_port              = 80
+      https_port             = 443
+      origin_protocol_policy = "https-only"
+      origin_ssl_protocols   = ["TLSv1","TLSv1.1"]
     }
   }
 
@@ -23,10 +23,10 @@ resource "aws_cloudfront_distribution" "api_gateway" {
 
     forwarded_values {
       query_string = true
-			headers = ["Accept", "Referer", "Authorization", "Content-Type"]
-			cookies {
-				forward = "all"
-			}
+      headers = ["Accept", "Referer", "Authorization", "Content-Type"]
+      cookies {
+        forward = "all"
+      }
     }
   }
 
@@ -36,9 +36,9 @@ resource "aws_cloudfront_distribution" "api_gateway" {
     cloudfront_default_certificate = true
   }
 
-	restrictions {
-		geo_restriction {
-			restriction_type = "none"
-		}
-	}
+  restrictions {
+    geo_restriction {
+      restriction_type = "none"
+    }
+  }
 }
