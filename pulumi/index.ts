@@ -125,8 +125,7 @@ const cloudFront = new aws.cloudfront.Distribution(`${prefix}-cloudfront`, {
   priceClass: "PriceClass_All",
 
   origins: [{
-    // TODO: Remove hardcoded region
-    domainName: pulumi.interpolate`${apiGateway.id}.execute-api.us-east-1.amazonaws.com`,
+    domainName: pulumi.interpolate`${apiGateway.id}.execute-api.${aws.getRegionOutput().name}.amazonaws.com`,
     originPath: pulumi.interpolate`/${gatewayStage.name}`,
     originId: "api",
     customOriginConfig: {
