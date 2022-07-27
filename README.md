@@ -57,6 +57,8 @@ Designed to be a side-by-side comparison of [Pulumi](https://www.pulumi.com/) an
   * This will almost certainly happen if you delete a resource that was managed by Pulumi
 * Viewing stacks
   * `pulumi stack ls`
+* Viewing Outputs of Stacks:
+  * `pulumi stack output`
 * Switching to a different active stack:
   * `pulumi stack select ${NAME:?}`
 * Destroying the stack
