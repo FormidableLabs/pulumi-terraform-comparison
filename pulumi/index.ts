@@ -120,5 +120,50 @@ const gatewayStage = new aws.apigatewayv2.Stage(`${prefix}-api-stage`, {
   }
 }, {dependsOn: [apiRoute]});
 
+const cloudFront = new aws.cloudfront.Distribution(`${prefix}-cloudfront`, {
+  enabled: true,
+  priceClass: "PriceClass_All",
+
+  origins: [{
+    domainName: pulumi.interpolate`${apiGateway.id}.execute-api.${aws.getRegion()}.amazonaws.com`,
+    originPath: pulumi.interpolate`/${gatewayStage.name}`,
+    originId: "api",
+    customOriginConfig: {
+      httpPort: 80,
+      httpsPort: 443,
+      originProtocolPolicy: "https-only",
+      originSslProtocols: ["TLSv1", "TLSv1.1"],
+    },
+  }],
+
+  defaultCacheBehavior: {
+    allowedMethods: [
+      "DELETE", "GET", "HEAD", "OPTIONS", "PATCH", "POST", "PUT",
+    ],
+    cachedMethods: [
+      "GET", "HEAD",
+    ],
+    compress: true,
+    targetOriginId: "api",
+    viewerProtocolPolicy: "https-only",
+    forwardedValues: {
+      queryString: true,
+      headers: ["Accept", "Referer", "Authorization", "Content-Type"],
+      cookies: {
+        forward: "all",
+      },
+    },
+  },
+  viewerCertificate: {
+    cloudfrontDefaultCertificate: true,
+  },
+
+  restrictions: {
+    geoRestriction: {
+      restrictionType: "none",
+    }
+  },
+
+});
 
 export const endpointUrl = pulumi.interpolate`${gatewayStage.invokeUrl}`;
