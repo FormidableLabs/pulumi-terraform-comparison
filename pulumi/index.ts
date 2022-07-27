@@ -125,7 +125,8 @@ const cloudFront = new aws.cloudfront.Distribution(`${prefix}-cloudfront`, {
   priceClass: "PriceClass_All",
 
   origins: [{
-    domainName: pulumi.interpolate`${apiGateway.id}.execute-api.${aws.getRegion()}.amazonaws.com`,
+    // TODO: Remove hardcoded region
+    domainName: pulumi.interpolate`${apiGateway.id}.execute-api.us-east-1.amazonaws.com`,
     originPath: pulumi.interpolate`/${gatewayStage.name}`,
     originId: "api",
     customOriginConfig: {
@@ -166,4 +167,5 @@ const cloudFront = new aws.cloudfront.Distribution(`${prefix}-cloudfront`, {
 
 });
 
-export const endpointUrl = pulumi.interpolate`${gatewayStage.invokeUrl}`;
+export const gatewayEndpointUrl = pulumi.interpolate`${gatewayStage.invokeUrl}`;
+export const cloudFrontUrl = pulumi.interpolate`${cloudFront.domainName}`
