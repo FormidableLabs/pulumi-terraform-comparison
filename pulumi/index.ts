@@ -72,3 +72,7 @@ const lambdaFunction = new aws.lambda.Function(`${lambdaName}`, {
     cloudWatch,
   ],
 });
+
+const apiGateway = new aws.apigatewayv2.Api("${prefix}-api-gateway", {
+  protocolType: "HTTP",
+});
