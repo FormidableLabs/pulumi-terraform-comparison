@@ -96,7 +96,7 @@ const apiIntegration = new aws.apigatewayv2.Integration(`${prefix}-api-integrati
 const apiRoute = new aws.apigatewayv2.Route(`${prefix}-api-route`, {
   apiId: apiGateway.id,
   routeKey: "GET /hello",
-  target: pulumi.interpolate`integrations/${apiIntegration.id}"`,
+  target: pulumi.interpolate`integrations/${apiIntegration.id}`,
 });
 
 const gatewayStage = new aws.apigatewayv2.Stage(`${prefix}-api-stage`, {
