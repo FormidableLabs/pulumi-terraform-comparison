@@ -2,6 +2,7 @@ import * as pulumi from "@pulumi/pulumi";
 import * as aws from "@pulumi/aws";
 import * as AdmZip from 'adm-zip';
 import * as md5File from 'md5-file';
+import * as apiGatewayImport from "./api-gateway"
 import { BucketObject } from "@pulumi/aws/s3";
 
 const config = new pulumi.Config();
@@ -97,17 +98,8 @@ const lambdaFunction = new aws.lambda.Function(`${lambdaName}`, {
   ],
 });
 
-const apiGateway = new aws.apigatewayv2.Api(`${prefix}-api-gateway`, {
-  protocolType: "HTTP",
-});
 
-const lambdaPermission = new aws.lambda.Permission(`${prefix}-lambda-permission`, {
-  statementId: "AllowExecutionFromAPIGateway",
-  action: "lambda:InvokeFunction",
-  principal: "apigateway.amazonaws.com",
-  function: lambdaFunction,
-  sourceArn: pulumi.interpolate`${apiGateway.executionArn}/*/*`,
-}, {dependsOn: [apiGateway, lambdaFunction]});
+const apiGateway = apiGatewayImport.createApiGateway(prefix, lambdaFunction);
 
 const apiIntegration = new aws.apigatewayv2.Integration(`${prefix}-api-integration`, {
   apiId: apiGateway.id,
