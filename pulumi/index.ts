@@ -1,6 +1,8 @@
 import * as pulumi from "@pulumi/pulumi";
 import * as aws from "@pulumi/aws";
 import * as AdmZip from 'adm-zip';
+import * as md5File from 'md5-file';
+import { BucketObject } from "@pulumi/aws/s3";
 
 const config = new pulumi.Config();
 const projectName = config.require("project_name");
@@ -55,10 +57,23 @@ const cloudWatch = new aws.cloudwatch.LogGroup(`/aws/lambda/${lambdaName}`, {
   retentionInDays: config.getNumber("logRetention") || 14
 });
 
+const codeBucket = new aws.s3.BucketV2(`${prefix}-code-bucket`, {});
+new aws.s3.BucketAclV2(`${prefix}-code-bucket-acl`, {
+  bucket: codeBucket.id,
+  acl: "private",
+});
+
 // Create zip file for Lambda
 const lambdaZip = new AdmZip();
 lambdaZip.addLocalFolder("../lambda");
 lambdaZip.writeZip("lambda.zip");
+
+new aws.s3.BucketObject("lambda-code", {
+  key: "lambda.zip",
+  bucket: codeBucket.id,
+  source: new pulumi.asset.FileAsset("lambda.zip"),
+  etag: md5File.sync("lambda.zip"),
+});
 
 const lambdaFunction = new aws.lambda.Function(`${lambdaName}`, {
   code: new pulumi.asset.FileArchive("lambda.zip"),
