@@ -43,5 +43,5 @@ export function createLambdaPermissions(prefix: string) {
     policyArn: lambdaLoggingPolicy.arn,
   });
 
-  return { lambdaRole, lambdaRoleAttachment };
+  return { lambdaRole };
 }

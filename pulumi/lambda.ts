@@ -6,7 +6,6 @@ export function createLambda(
   codeBucket: aws.s3.BucketV2,
   lambdaCodeObject: aws.s3.BucketObject,
   lambdaZipHash: string,
-  lambdaRoleAttachment: aws.iam.RolePolicyAttachment,
   cloudWatch: aws.cloudwatch.LogGroup
   ) {
 
@@ -21,7 +20,7 @@ export function createLambda(
     sourceCodeHash: lambdaZipHash,
   }, {
     dependsOn: [
-      lambdaRoleAttachment,
+      lambdaRole,
       cloudWatch,
     ],
   });

@@ -13,7 +13,7 @@ const uniqueId = config.require("unique_identifier");
 const prefix = `${projectName}-${uniqueId}`;
 const lambdaName = `${prefix}-lambda`;
 
-const { lambdaRole, lambdaRoleAttachment } = lambdaPermissions.createLambdaPermissions(prefix);
+const { lambdaRole } = lambdaPermissions.createLambdaPermissions(prefix);
 
 const cloudWatch = new aws.cloudwatch.LogGroup(`/aws/lambda/${lambdaName}`, {
   name: `/aws/lambda/${lambdaName}`,
@@ -27,7 +27,6 @@ const lambdaFunction = lambdaImport.createLambda(
   codeBucket,
   lambdaCodeObject,
   lambdaZipHash,
-  lambdaRoleAttachment,
   cloudWatch);
 
 const { apiGateway, gatewayStage } = apiGatewayImport.createApiGateway(prefix, lambdaFunction, cloudWatch);
