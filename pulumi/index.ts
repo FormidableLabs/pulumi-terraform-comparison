@@ -189,5 +189,5 @@ const cloudFront = new aws.cloudfront.Distribution(`${prefix}-cloudfront`, {
 
 });
 
-export const gatewayEndpointUrl = pulumi.interpolate`${gatewayStage.invokeUrl}`;
-export const cloudFrontUrl = pulumi.interpolate`${cloudFront.domainName}`
+export const gatewayEndpointUrl = pulumi.interpolate`${gatewayStage.invokeUrl}/hello`;
+export const cloudFrontUrl = pulumi.interpolate`https://${cloudFront.domainName}/hello`
