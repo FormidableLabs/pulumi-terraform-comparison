@@ -2,8 +2,8 @@ import * as pulumi from "@pulumi/pulumi";
 import * as aws from "@pulumi/aws";
 import * as AdmZip from 'adm-zip';
 import * as md5File from 'md5-file';
-import * as apiGatewayImport from "./api-gateway"
-import { BucketObject } from "@pulumi/aws/s3";
+import * as apiGatewayImport from "./api-gateway";
+import * as cloudFrontImport from "./cloudfront";
 
 const config = new pulumi.Config();
 const projectName = config.require("project_name");
@@ -99,52 +99,7 @@ const lambdaFunction = new aws.lambda.Function(`${lambdaName}`, {
 });
 
 const { apiGateway, gatewayStage } = apiGatewayImport.createApiGateway(prefix, lambdaFunction, cloudWatch);
-
-const cloudFront = new aws.cloudfront.Distribution(`${prefix}-cloudfront`, {
-  enabled: true,
-  priceClass: "PriceClass_All",
-
-  origins: [{
-    domainName: pulumi.interpolate`${apiGateway.id}.execute-api.${aws.getRegionOutput().name}.amazonaws.com`,
-    originPath: pulumi.interpolate`/${gatewayStage.name}`,
-    originId: "api",
-    customOriginConfig: {
-      httpPort: 80,
-      httpsPort: 443,
-      originProtocolPolicy: "https-only",
-      originSslProtocols: ["TLSv1", "TLSv1.1"],
-    },
-  }],
-
-  defaultCacheBehavior: {
-    allowedMethods: [
-      "DELETE", "GET", "HEAD", "OPTIONS", "PATCH", "POST", "PUT",
-    ],
-    cachedMethods: [
-      "GET", "HEAD",
-    ],
-    compress: true,
-    targetOriginId: "api",
-    viewerProtocolPolicy: "https-only",
-    forwardedValues: {
-      queryString: true,
-      headers: ["Accept", "Referer", "Authorization", "Content-Type"],
-      cookies: {
-        forward: "all",
-      },
-    },
-  },
-  viewerCertificate: {
-    cloudfrontDefaultCertificate: true,
-  },
-
-  restrictions: {
-    geoRestriction: {
-      restrictionType: "none",
-    }
-  },
-
-});
+const cloudFront = cloudFrontImport.createCloudWatch(prefix, apiGateway, gatewayStage);
 
 export const gatewayEndpointUrl = pulumi.interpolate`${gatewayStage.invokeUrl}/hello`;
 export const cloudFrontUrl = pulumi.interpolate`https://${cloudFront.domainName}/hello`

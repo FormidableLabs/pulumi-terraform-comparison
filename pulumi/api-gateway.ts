@@ -1,7 +1,7 @@
 import * as aws from "@pulumi/aws";
 import * as pulumi from "@pulumi/pulumi";
 
-export function createApiGateway(prefix: string, lambdaFunction: aws.lambda.Function, cloudWatch:aws.cloudwatch.LogGroup ) {
+export function createApiGateway(prefix: string, lambdaFunction: aws.lambda.Function, cloudWatch:aws.cloudwatch.LogGroup) {
   const apiGateway = new aws.apigatewayv2.Api(`${prefix}-api-gateway`, {
     protocolType: "HTTP",
   });
