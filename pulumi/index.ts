@@ -68,7 +68,11 @@ const lambdaZip = new AdmZip();
 lambdaZip.addLocalFolder("../lambda");
 lambdaZip.writeZip("lambda.zip");
 
-new aws.s3.BucketObject("lambda-code", {
+const crypto = require('crypto');
+const lambdaZipHash = crypto.createHash('sha256').update("lambda.zip").digest('base64');
+console.log(`Lambda Zip Hash: ${lambdaZipHash}`);
+
+const lambdaCodeObject = new aws.s3.BucketObject("lambda-code", {
   key: "lambda.zip",
   bucket: codeBucket.id,
   source: new pulumi.asset.FileAsset("lambda.zip"),
@@ -76,18 +80,20 @@ new aws.s3.BucketObject("lambda-code", {
 });
 
 const lambdaFunction = new aws.lambda.Function(`${lambdaName}`, {
-  code: new pulumi.asset.FileArchive("lambda.zip"),
   name: lambdaName,
   role: lambdaRole.arn,
   handler: "index.handler",
   runtime: "nodejs16.x",
+
+  s3Bucket: codeBucket.id,
+  s3Key: lambdaCodeObject.key,
+  sourceCodeHash: lambdaZipHash,
 }, {
   dependsOn: [
     lambdaRoleAttachment,
     cloudWatch,
   ],
 });
-
 
 const apiGateway = new aws.apigatewayv2.Api(`${prefix}-api-gateway`, {
   protocolType: "HTTP",
