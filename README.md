@@ -105,7 +105,7 @@ Configurations are stored in the `Pulumi.dev.yaml` file (`dev` is the environmen
 * Get a variable
   * `pulumi config get ${key:?}`
 
-### Links
+## Links
 * [Downloading/Installing - Official Docs](https://www.pulumi.com/docs/get-started/install/)
 * [Fundamentals - Official Docs](https://www.pulumi.com/learn/pulumi-fundamentals/)
 * [Stacks - Official Docs](https://www.pulumi.com/learn/building-with-pulumi/understanding-stacks/)
