@@ -12,7 +12,6 @@ const projectName = config.require("project_name");
 const uniqueId = config.require("unique_identifier");
 const prefix = `${projectName}-${uniqueId}`;
 const lambdaName = `${prefix}-lambda`;
-const lambdaZipName = "lambda.zip";
 
 const { lambdaRole, lambdaRoleAttachment } = lambdaPermissions.createLambdaPermissions(prefix);
 
@@ -21,7 +20,7 @@ const cloudWatch = new aws.cloudwatch.LogGroup(`/aws/lambda/${lambdaName}`, {
   retentionInDays: config.getNumber("logRetention") || 14
 });
 
-const {codeBucket, lambdaCodeObject, lambdaZipHash} = lambdaCode.createLambdaCode(prefix, lambdaZipName);
+const {codeBucket, lambdaCodeObject, lambdaZipHash} = lambdaCode.createLambdaCode(prefix);
 const lambdaFunction = lambdaImport.createLambda(
   lambdaName,
   lambdaRole,

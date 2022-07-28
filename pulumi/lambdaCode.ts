@@ -3,7 +3,8 @@ import * as pulumi from "@pulumi/pulumi";
 import * as AdmZip from 'adm-zip';
 import * as md5File from 'md5-file';
 
-export function createLambdaCode(prefix: string, lambdaZipName: string) {
+export function createLambdaCode(prefix: string) {
+  const lambdaZipName = "lambda.zip";
   const codeBucket = new aws.s3.BucketV2(`${prefix}-code-bucket`, {});
   new aws.s3.BucketAclV2(`${prefix}-code-bucket-acl`, {
     bucket: codeBucket.id,
