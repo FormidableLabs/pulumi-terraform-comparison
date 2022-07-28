@@ -5,6 +5,7 @@ import * as apiGatewayImport from "./api-gateway";
 import * as cloudFrontImport from "./cloudfront";
 import * as lambdaCode from "./lambdaCode";
 import * as lambdaPermissions from "./lambdaPermissions";
+import * as lambdaImport from "./lambda";
 
 const config = new pulumi.Config();
 const projectName = config.require("project_name");
@@ -21,22 +22,14 @@ const cloudWatch = new aws.cloudwatch.LogGroup(`/aws/lambda/${lambdaName}`, {
 });
 
 const {codeBucket, lambdaCodeObject, lambdaZipHash} = lambdaCode.createLambdaCode(prefix, lambdaZipName);
-
-const lambdaFunction = new aws.lambda.Function(`${lambdaName}`, {
-  name: lambdaName,
-  role: lambdaRole.arn,
-  handler: "index.handler",
-  runtime: "nodejs16.x",
-
-  s3Bucket: codeBucket.id,
-  s3Key: lambdaCodeObject.key,
-  sourceCodeHash: lambdaZipHash,
-}, {
-  dependsOn: [
-    lambdaRoleAttachment,
-    cloudWatch,
-  ],
-});
+const lambdaFunction = lambdaImport.createLambda(
+  lambdaName,
+  lambdaRole,
+  codeBucket,
+  lambdaCodeObject,
+  lambdaZipHash,
+  lambdaRoleAttachment,
+  cloudWatch);
 
 const { apiGateway, gatewayStage } = apiGatewayImport.createApiGateway(prefix, lambdaFunction, cloudWatch);
 const cloudFront = cloudFrontImport.createCloudWatch(prefix, apiGateway, gatewayStage);
