@@ -7,8 +7,9 @@ import { BucketObject } from "@pulumi/aws/s3";
 const config = new pulumi.Config();
 const projectName = config.require("project_name");
 const uniqueId = config.require("unique_identifier");
-const prefix = `${projectName}-${uniqueId}`
-const lambdaName = `${prefix}-lambda`
+const prefix = `${projectName}-${uniqueId}`;
+const lambdaName = `${prefix}-lambda`;
+const lambdaZipName = "lambda.zip";
 
 const lambdaLoggingPolicy = new aws.iam.Policy(`${prefix}-lambda-logging`, {
   path: "/",
@@ -66,17 +67,18 @@ new aws.s3.BucketAclV2(`${prefix}-code-bucket-acl`, {
 // Create zip file for Lambda
 const lambdaZip = new AdmZip();
 lambdaZip.addLocalFolder("../lambda");
-lambdaZip.writeZip("lambda.zip");
+lambdaZip.writeZip(lambdaZipName);
 
 const crypto = require('crypto');
-const lambdaZipHash = crypto.createHash('sha256').update("lambda.zip").digest('base64');
-console.log(`Lambda Zip Hash: ${lambdaZipHash}`);
+const fs = require('fs');
+const fileBuffer = fs.readFileSync(lambdaZipName);
+const lambdaZipHash = crypto.createHash('sha256').update(fileBuffer).digest('base64');
 
 const lambdaCodeObject = new aws.s3.BucketObject("lambda-code", {
-  key: "lambda.zip",
+  key: lambdaZipName,
   bucket: codeBucket.id,
-  source: new pulumi.asset.FileAsset("lambda.zip"),
-  etag: md5File.sync("lambda.zip"),
+  source: new pulumi.asset.FileAsset(lambdaZipName),
+  etag: md5File.sync(lambdaZipName),
 });
 
 const lambdaFunction = new aws.lambda.Function(`${lambdaName}`, {
