@@ -1,6 +1,6 @@
 # Pulumni and Terraform Comparison
 
-Designed to be a side-by-side comparison of [Pulumi](https://www.pulumi.com/) and Terraform, two Infrastructure as Code technologies
+Designed to be a side-by-side comparison of [Pulumi](https://www.pulumi.com/) and Terraform, two Infrastructure as Code technologies. We published a [blog based on this repository](https://formidable.com/blog/2022/pulumi-or-terraform/) that is more coherent than the ramblings that follow!
 
 ## Summary
 Pulumi reminds me of what [troposphere](https://pypi.org/project/troposphere/) is for Python/CloudFormation in that they're both Infrastructure as Code that you write in a programming language. While troposphere generates CloudFormation templates, Pulumi is more like a managed Terraform service where the state and stacks are managed by Pulumi. Pulumi can be written in TypeScript, Python, Go, C#, Java or YAML (I used exclusively TypeScript in this repository). The syntax for Pulumi is VERY similar to Terraform, and frequently the biggest change was converting snake to camel case. Being fluent in Terraform was a huge help for writing in Pulumi as the syntax was so similar. The size of the resources where pretty similar in terms of number of lines.
