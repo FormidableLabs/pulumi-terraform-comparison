@@ -4,7 +4,8 @@ import { s3, kms } from "@cdktf/provider-aws";
 export function createBucket(
   stack: TerraformStack,
   bucketName: string,
-  encrypt: boolean
+  encrypt: boolean,
+  versioning: boolean
 ) {
 
   const bucket = new s3.S3Bucket(stack, bucketName, {
@@ -28,6 +29,15 @@ export function createBucket(
           }
         },
       ],
+    });
+  }
+
+  if (versioning) {
+    new s3.S3BucketVersioningA(stack, 'bucket-versioning', {
+      bucket: bucket.bucket,
+      versioningConfiguration: {
+        status: "Enabled"
+      },
     });
   }
 

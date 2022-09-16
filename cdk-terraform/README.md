@@ -6,6 +6,7 @@ Cloud Development Kit for Terraform (CDKTF)
 * [Install CDKTF](https://learn.hashicorp.com/tutorials/terraform/cdktf-install?in=terraform/cdktf)
 
 ## Running Through CDKTF
+* These should all be ran from the `cdk-terraform` directory
 * Deploy the state stack to manage state:
   * `cdktf deploy cdk-terraform-state`
   * **This does have to be deployed before the Lambda stack**
@@ -18,7 +19,7 @@ Cloud Development Kit for Terraform (CDKTF)
   * `cdktf destroy lambda cdk-terraform-state`
 
 ## Running Using Native Terraform
-* Running a Terraform init with migrating the state:
+* Running a Terraform init with migrating the state or reconfiguring:
   * `terraform -chdir=cdktf.out/stacks/lambda init -migrate-state`
   * `terraform -chdir=cdktf.out/stacks/lambda init -reconfigure`
 

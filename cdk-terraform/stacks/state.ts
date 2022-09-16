@@ -14,7 +14,7 @@ export class State extends TerraformStack {
 
     new AwsProvider(this, 'aws', {});
 
-    const stateBucket = s3Lib.createBucket(this, props.bucketName, true);
+    const stateBucket = s3Lib.createBucket(this, props.bucketName, true, false);
 
     new TerraformOutput(this, "stateBucket",  {
       value: stateBucket.id
