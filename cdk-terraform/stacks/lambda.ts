@@ -40,6 +40,11 @@ const lambdaCloudWatchPolicy = {
 const lambdaExecutionPolicyArn = 'arn:aws:iam::aws:policy/service-role/AWSLambdaBasicExecutionRole'
 
 export class LambdaStack extends TerraformStack {
+
+  public logGroup: cloudwatch.CloudwatchLogGroup;
+  public functionInvokeArn: string;
+  public functionName: string;
+
   constructor(scope: Construct, name: string, props: LambdaProps) {
     super(scope, name);
     new AwsProvider(this, 'aws', {});
@@ -65,7 +70,7 @@ export class LambdaStack extends TerraformStack {
       sourceHash: lambdaZip.assetHash
     });
 
-    const logGroup = new cloudwatch.CloudwatchLogGroup(this, "lambdaCloudWatchGroup", {
+    this.logGroup = new cloudwatch.CloudwatchLogGroup(this, "lambdaCloudWatchGroup", {
       name: `/aws/lambda/${lambdaName}`,
       retentionInDays: 7
     });
@@ -92,7 +97,7 @@ export class LambdaStack extends TerraformStack {
       role: lambdaRole.name
     });
 
-    new lambdafunction.LambdaFunction(this, "lambdaFunction", {
+    const lambdaFunction = new lambdafunction.LambdaFunction(this, "lambdaFunction", {
       functionName: lambdaName,
       role: lambdaRole.arn,
       s3Bucket: codeBucket.bucket,
@@ -103,9 +108,12 @@ export class LambdaStack extends TerraformStack {
       // TODO Make this dynamic as well
       runtime: "nodejs16.x",
       dependsOn: [
-        logGroup,
+        this.logGroup,
         loggingPolicyAttachment,
       ],
     });
+
+    this.functionInvokeArn = lambdaFunction.invokeArn;
+    this.functionName = lambdaFunction.functionName;
   }
 }

@@ -11,8 +11,8 @@ Cloud Development Kit for Terraform (CDKTF)
   * `cdktf deploy cdk-terraform-state`
   * **This does have to be deployed before the Lambda stack**
   * State for this stack is stored locally... without the use of terragrunt, I couldn't find a way around this without having to modify the code before and after running
-* Deploy the Lambda stack:
-  * `cdktf deploy lambda`
+* Deploy the stacks:
+  * `cdktf deploy lambda api-gateway`
 * Get a list of the stacks:
   * `cdktf list`
 * Destroying all stacks:
