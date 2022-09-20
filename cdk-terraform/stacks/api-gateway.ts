@@ -11,17 +11,21 @@ export interface ApiGatewayProps {
 
 export class ApiGatewayStack extends TerraformStack {
 
+  public gatewayId: string;
+  public stageName: string;
+
   constructor(scope: Construct, name: string, props: ApiGatewayProps) {
     super(scope, name);
     new AwsProvider(this, 'aws', {});
-    console.log(props);
 
     const api = new apigatewayv2.Apigatewayv2Api (this, "apiGateway", {
       name: `${props.projectName}-api-gateway`,
       protocolType: "HTTP"
     });
 
-    new apigatewayv2.Apigatewayv2Stage (this, "apiGatewayStage", {
+    this.gatewayId = api.id
+
+    const stage = new apigatewayv2.Apigatewayv2Stage (this, "apiGatewayStage", {
       apiId: api.id,
       name: `${props.projectName}-gateway-stage`,
       autoDeploy: true,
@@ -41,6 +45,8 @@ export class ApiGatewayStack extends TerraformStack {
         }),
       },
     });
+
+    this.stageName = stage.name
 
     const gatewayIntegration = new apigatewayv2.Apigatewayv2Integration (this, "gatewayIntegration", {
       apiId: api.id,

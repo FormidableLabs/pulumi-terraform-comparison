@@ -22,6 +22,7 @@
   "dependencies": {
     "@cdktf/provider-aws": "^9.0.29",
     "cdktf": "^0.12.2",
+    "cdktf-cli": "^0.12.2",
     "constructs": "^10.1.103"
   },
   "devDependencies": {
