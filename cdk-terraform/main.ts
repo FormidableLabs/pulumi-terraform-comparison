@@ -9,9 +9,9 @@ const projectName = "cdk-terraform";
 const stateBucketName = projectName + "-state-bucket";
 const region = "us-east-1"
 
-// App/Stack that does not have state in S3 bucket
 const app = new App();
 
+// Stack for holding the state for the rest of the stacks
 new State(app, "cdk-terraform-state", {
   bucketName: stateBucketName,
   encrypt: true
