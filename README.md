@@ -1,4 +1,5 @@
-# Pulumni and Terraform Comparison
+[![Pulumni and Terraform Comparison — Formidable, We build the modern web](https://raw.githubusercontent.com/FormidableLabs/pulumi-terraform-comparison/main/pulumi-terraform-comparison-Hero.png)](https://formidable.com/open-source/)
+
 
 Designed to be a side-by-side comparison of [Pulumi](https://www.pulumi.com/) and Terraform, two Infrastructure as Code technologies. We published a [blog based on this repository](https://formidable.com/blog/2022/pulumi-or-terraform/) that is more coherent than the ramblings that follow!
 
